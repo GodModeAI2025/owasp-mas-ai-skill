@@ -1,0 +1,19 @@
+{
+  "name": "owasp-mas",
+  "version": "1.0.0",
+  "description": "OWASP Mobile Application Security – Vollständiges Audit-, Entwicklungs- und Architektur-Plugin basierend auf MASVS v2.1, MASWE und MASTG. Für Auditoren, Prüfer, Entwickler und Architekten.",
+  "author": "Mark Zimmermann",
+  "skills": [
+    "skills/mas-auditor",
+    "skills/mas-developer",
+    "skills/mas-architect",
+    "skills/mas-report",
+    "skills/mas-weakness"
+  ],
+  "commands": [
+    "commands/mas-audit.md",
+    "commands/mas-check.md",
+    "commands/mas-report.md",
+    "commands/mas-weakness.md"
+  ]
+}
