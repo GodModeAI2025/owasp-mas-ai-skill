@@ -1,0 +1,53 @@
+Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+
+This is a human-readable summary of (and not a substitute for) the license.
+Full legal code: https://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+You are free to:
+
+  Share — copy and redistribute the material in any medium or format for
+  any purpose, including commercially.
+
+  Adapt — remix, transform, and build upon the material for any purpose,
+  including commercially.
+
+Under the following terms:
+
+  Attribution — You must give appropriate credit, provide a link to the
+  license, and indicate if changes were made. You may do so in any
+  reasonable manner, but not in any way that suggests the licensor
+  endorses you or your use.
+
+  ShareAlike — If you remix, transform, or build upon the material, you
+  must distribute your contributions under the same license as the
+  original.
+
+  No additional restrictions — You may not apply legal terms or
+  technological measures that legally restrict others from doing anything
+  the license permits.
+
+---
+
+ATTRIBUTION NOTICE
+
+This work is derived from the OWASP Mobile Application Security (MAS) project:
+
+- OWASP MASVS (https://github.com/OWASP/masvs) — CC BY-SA 4.0
+- OWASP MASWE (https://github.com/OWASP/maswe) — CC BY-SA 4.0
+- OWASP MASTG (https://github.com/OWASP/mastg) — CC BY-SA 4.0
+
+Copyright (c) OWASP Foundation. All rights reserved.
+
+OWASP is a registered trademark of the OWASP Foundation, Inc.
+This project is not affiliated with, endorsed by, or sponsored by
+the OWASP Foundation.
+
+MODIFICATIONS
+
+The original OWASP content has been transformed, consolidated, and
+enriched for use as a Claude AI Skill. Specific modifications include:
+- Restructuring into Claude Skill format (SKILL.md + references/)
+- Consolidation from three separate repositories into one knowledge package
+- Addition of platform-specific code examples (Kotlin/Swift)
+- Addition of report templates, CWE mappings, regulatory mappings
+- Optimization for AI processing (progressive disclosure, role-based access)
