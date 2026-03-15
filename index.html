@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OWASP MAS AI Skill – Mobile Security meets AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #05080f;
+  --bg-card: #0b1120;
+  --bg-card-hover: #0f1830;
+  --accent-cyan: #00e5ff;
+  --accent-blue: #3d5afe;
+  --accent-purple: #7c4dff;
+  --accent-green: #00e676;
+  --accent-orange: #ff6d00;
+  --accent-red: #ff1744;
+  --text-primary: #e8eaf6;
+  --text-muted: #78849e;
+  --text-dim: #4a5568;
+  --border: rgba(0,229,255,0.08);
+  --glow-cyan: rgba(0,229,255,0.15);
+  --glow-blue: rgba(61,90,254,0.15);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ═══ GRID NOISE OVERLAY ═══ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0,229,255,0.06), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 60%, rgba(124,77,255,0.04), transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h60v60H0z' fill='none'/%3E%3Cpath d='M0 30h60M30 0v60' stroke='%2300e5ff' stroke-opacity='0.02' stroke-width='0.5'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══ SCANLINE ANIMATION ═══ */
+@keyframes scanline {
+  0% { transform: translateY(-100vh); }
+  100% { transform: translateY(100vh); }
+}
+
+.scanline {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+  opacity: 0.07;
+  animation: scanline 8s linear infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ═══ LAYOUT ═══ */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* ═══ NAV ═══ */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(5,8,15,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0.8rem 0;
+}
+
+nav .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.nav-logo-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--bg-deep);
+}
+
+.nav-logo span {
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--accent-cyan); }
+
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  background: rgba(0,229,255,0.08);
+  border: 1px solid rgba(0,229,255,0.2);
+  border-radius: 8px;
+  color: var(--accent-cyan) !important;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem !important;
+  transition: all 0.3s;
+}
+
+.nav-cta:hover {
+  background: rgba(0,229,255,0.15);
+  border-color: rgba(0,229,255,0.4);
+  box-shadow: 0 0 20px var(--glow-cyan);
+}
+
+/* ═══ HERO ═══ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 5rem;
+  position: relative;
+}
+
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  border: 1px solid;
+}
+
+.badge-owasp { color: var(--accent-blue); border-color: rgba(61,90,254,0.3); background: rgba(61,90,254,0.08); }
+.badge-cc { color: var(--accent-green); border-color: rgba(0,230,118,0.3); background: rgba(0,230,118,0.08); }
+.badge-ai { color: var(--accent-purple); border-color: rgba(124,77,255,0.3); background: rgba(124,77,255,0.08); }
+
+.hero h1 {
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 .gradient-text {
+  background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-blue) 50%, var(--accent-purple) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero h1 .line-break { display: block; }
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  max-width: 640px;
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+  font-weight: 400;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 2rem;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+  color: var(--bg-deep);
+  border: none;
+  border-radius: 10px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 20px rgba(0,229,255,0.2);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0,229,255,0.35);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 2rem;
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.2);
+  transform: translateY(-2px);
+}
+
+/* ═══ TERMINAL BLOCK ═══ */
+.terminal {
+  background: #0a0e1a;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  max-width: 600px;
+  margin-bottom: 2rem;
+}
+
+.terminal-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1rem;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid var(--border);
+}
+
+.terminal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.terminal-dot:nth-child(1) { background: #ff5f56; }
+.terminal-dot:nth-child(2) { background: #ffbd2e; }
+.terminal-dot:nth-child(3) { background: #27c93f; }
+
+.terminal-title {
+  margin-left: 0.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+.terminal-body {
+  padding: 1.2rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  line-height: 1.8;
+}
+
+.terminal-body .prompt { color: var(--accent-green); }
+.terminal-body .cmd { color: var(--text-primary); }
+.terminal-body .comment { color: var(--text-dim); }
+.terminal-body .output { color: var(--accent-cyan); }
+
+/* ═══ SECTION STYLING ═══ */
+section {
+  padding: 6rem 0;
+}
+
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  margin-bottom: 0.8rem;
+}
+
+.section-title {
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+}
+
+.section-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  line-height: 1.7;
+  margin-bottom: 3rem;
+}
+
+/* ═══ THREE PILLARS ═══ */
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.pillar-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+  position: relative;
+  overflow: hidden;
+}
+
+.pillar-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.pillar-card:hover::before { opacity: 1; }
+
+.pillar-card:hover {
+  background: var(--bg-card-hover);
+  border-color: rgba(0,229,255,0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+
+.pillar-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  margin-bottom: 1.2rem;
+}
+
+.pillar-icon-blue { background: rgba(61,90,254,0.12); border: 1px solid rgba(61,90,254,0.2); }
+.pillar-icon-cyan { background: rgba(0,229,255,0.1); border: 1px solid rgba(0,229,255,0.2); }
+.pillar-icon-purple { background: rgba(124,77,255,0.12); border: 1px solid rgba(124,77,255,0.2); }
+
+.pillar-card h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+  letter-spacing: -0.01em;
+}
+
+.pillar-card .pillar-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  margin-bottom: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.pillar-card p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* ═══ ROLES GRID ═══ */
+.roles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.role-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.role-card:hover {
+  border-color: rgba(0,229,255,0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.role-header {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.role-emoji { font-size: 1.4rem; }
+
+.role-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.role-desc {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.role-triggers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: auto;
+}
+
+.role-trigger {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(0,229,255,0.06);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(0,229,255,0.1);
+}
+
+/* ═══ COVERAGE TABLE ═══ */
+.coverage-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-card);
+}
+
+.coverage-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.coverage-table th {
+  text-align: left;
+  padding: 1rem 1.2rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  background: rgba(255,255,255,0.02);
+  border-bottom: 1px solid var(--border);
+}
+
+.coverage-table td {
+  padding: 0.8rem 1.2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  color: var(--text-muted);
+}
+
+.coverage-table tr:last-child td { border-bottom: none; }
+
+.coverage-table tr:hover td {
+  background: rgba(0,229,255,0.02);
+}
+
+.coverage-table .cat-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  color: var(--accent-cyan);
+  font-size: 0.82rem;
+}
+
+.coverage-table .controls-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: rgba(0,229,255,0.08);
+  padding: 0.15rem 0.6rem;
+  border-radius: 6px;
+  display: inline-block;
+  font-size: 0.8rem;
+}
+
+/* ═══ INSTALL SECTION ═══ */
+.install-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.install-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 2rem;
+}
+
+.install-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+
+.install-card .install-desc {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 1.2rem;
+}
+
+.code-block {
+  background: #060a14;
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  line-height: 1.8;
+  color: var(--text-muted);
+  overflow-x: auto;
+}
+
+.code-block .kw { color: var(--accent-purple); }
+.code-block .str { color: var(--accent-green); }
+.code-block .cmd { color: var(--accent-cyan); }
+.code-block .comment { color: var(--text-dim); }
+
+/* ═══ AGENT PIPELINE ═══ */
+.pipeline-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.pipeline-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.3rem;
+  transition: all 0.3s;
+}
+
+.pipeline-card:hover {
+  border-color: rgba(124,77,255,0.2);
+  box-shadow: 0 0 20px rgba(124,77,255,0.05);
+}
+
+.pipeline-schema {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--accent-purple);
+  background: rgba(124,77,255,0.08);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 0.7rem;
+}
+
+.pipeline-card h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.pipeline-card p {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+/* ═══ STATS ═══ */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 2rem 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.stat-num {
+  font-size: 2.5rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 0.3rem;
+}
+
+/* ═══ AUTHOR / CTA ═══ */
+.cta-section {
+  text-align: center;
+  padding: 5rem 0;
+  position: relative;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(0,229,255,0.06), transparent 70%);
+  pointer-events: none;
+}
+
+.author-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.author-info a {
+  color: var(--accent-cyan);
+  text-decoration: none;
+}
+.author-info a:hover { text-decoration: underline; }
+
+.cta-title {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+}
+
+.cta-desc {
+  color: var(--text-muted);
+  max-width: 500px;
+  margin: 0 auto 2rem;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+/* ═══ FOOTER ═══ */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem 0;
+  position: relative;
+  z-index: 2;
+}
+
+footer .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+.footer-left a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+.footer-left a:hover { color: var(--accent-cyan); }
+
+.footer-right {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+}
+
+/* ═══ ANIMATIONS ═══ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in {
+  opacity: 0;
+  animation: fadeInUp 0.7s ease forwards;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; }
+.delay-6 { animation-delay: 0.6s; }
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 900px) {
+  .pillars-grid { grid-template-columns: 1fr; }
+  .install-options { grid-template-columns: 1fr; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .nav-links { display: none; }
+}
+
+@media (max-width: 600px) {
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .hero h1 { font-size: 2.2rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="scanline"></div>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="container">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">M</div>
+      <span>OWASP MAS AI Skill</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#pillars">Pillars</a></li>
+      <li><a href="#roles">Roles</a></li>
+      <li><a href="#coverage">Coverage</a></li>
+      <li><a href="#install">Install</a></li>
+      <li><a href="https://github.com/GodModeAI2025/owasp-mas-ai-skill" target="_blank" class="nav-cta">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        GitHub
+      </a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badges animate-in delay-1">
+      <span class="badge badge-owasp">◆ OWASP MASVS v2.1</span>
+      <span class="badge badge-owasp">◆ MASWE 117+ Weaknesses</span>
+      <span class="badge badge-owasp">◆ MASTG Testing Guide</span>
+      <span class="badge badge-cc">CC BY-SA 4.0</span>
+      <span class="badge badge-ai">Claude AI Skill</span>
+    </div>
+
+    <h1 class="animate-in delay-2">
+      Mobile Security<span class="line-break"><span class="gradient-text">meets Artificial Intelligence.</span></span>
+    </h1>
+
+    <p class="hero-subtitle animate-in delay-3">
+      Der komplette OWASP Mobile Application Security Standard als KI-Skill für Claude. Gebaut für Auditoren, Entwickler, Architekten und Compliance-Teams.
+    </p>
+
+    <div class="hero-actions animate-in delay-4">
+      <a href="https://github.com/GodModeAI2025/owasp-mas-ai-skill" target="_blank" class="btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        View on GitHub
+      </a>
+      <a href="#install" class="btn-secondary">
+        Installation →
+      </a>
+    </div>
+
+    <div class="terminal animate-in delay-5">
+      <div class="terminal-header">
+        <div class="terminal-dot"></div>
+        <div class="terminal-dot"></div>
+        <div class="terminal-dot"></div>
+        <span class="terminal-title">Claude Chat</span>
+      </div>
+      <div class="terminal-body">
+        <div><span class="prompt">You › </span><span class="cmd">"Analyze this IPA for MASVS compliance."</span></div>
+        <div><span class="prompt">You › </span><span class="cmd">"What is MASWE-0013?"</span></div>
+        <div><span class="prompt">You › </span><span class="cmd">"Create a threat model for our banking app."</span></div>
+        <div style="margin-top:0.5rem"><span class="output">✓ Skill activated · 7 roles · 24 controls · 117 weaknesses</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STATS ═══ -->
+<section>
+  <div class="container">
+    <div class="stats-row">
+      <div class="stat-item animate-in delay-1">
+        <div class="stat-num">24</div>
+        <div class="stat-label">MASVS Controls</div>
+      </div>
+      <div class="stat-item animate-in delay-2">
+        <div class="stat-num">117+</div>
+        <div class="stat-label">MASWE Weaknesses</div>
+      </div>
+      <div class="stat-item animate-in delay-3">
+        <div class="stat-num">7</div>
+        <div class="stat-label">Specialized Roles</div>
+      </div>
+      <div class="stat-item animate-in delay-4">
+        <div class="stat-num">20+</div>
+        <div class="stat-label">Security Tools</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ THREE PILLARS ═══ -->
+<section id="pillars">
+  <div class="container">
+    <div class="section-label">Three Pillars</div>
+    <h2 class="section-title">One Skill. Three OWASP Sources.</h2>
+    <p class="section-subtitle">Consolidated from three separate OWASP repos into a single, AI-ready knowledge package with end-to-end audit workflow.</p>
+
+    <div class="pillars-grid">
+      <div class="pillar-card animate-in delay-1">
+        <div class="pillar-icon pillar-icon-blue">🛡️</div>
+        <h3>OWASP MASVS</h3>
+        <div class="pillar-tag">What to verify · 24 controls · 8 categories</div>
+        <p>The verification standard – defines security requirements. Produces audit checklists, requirements matrices, and compliance evidence.</p>
+      </div>
+      <div class="pillar-card animate-in delay-2">
+        <div class="pillar-icon pillar-icon-cyan">🔍</div>
+        <h3>OWASP MASWE</h3>
+        <div class="pillar-tag">What to look for · 117+ weaknesses</div>
+        <p>The weakness enumeration – catalogs mobile-specific vulnerabilities with CWE mappings, severity ratings, and correlation analysis.</p>
+      </div>
+      <div class="pillar-card animate-in delay-3">
+        <div class="pillar-icon pillar-icon-purple">⚙️</div>
+        <h3>OWASP MASTG</h3>
+        <div class="pillar-tag">How to test · Techniques & Tools</div>
+        <p>The testing guide – provides concrete test procedures, tool references, and platform-specific test steps for Android and iOS.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ROLES ═══ -->
+<section id="roles">
+  <div class="container">
+    <div class="section-label">7 Roles</div>
+    <h2 class="section-title">Built for your workflow.</h2>
+    <p class="section-subtitle">The skill adapts to your role – just describe what you need.</p>
+
+    <div class="roles-grid">
+      <div class="role-card">
+        <div class="role-header">
+          <span class="role-emoji">🔐</span>
+          <span class="role-name">Auditor</span>
+        </div>
+        <div class="role-desc">MASVS checklists, findings, risk assessments. Full pentest workflow from IPA/APK to report.</div>
+        <div class="role-triggers">
+          <span class="role-trigger">audit</span>
+          <span class="role-trigger">checklist</span>
+          <span class="role-trigger">pentest</span>
+        </div>
+      </div>
+
+      <div class="role-card">
+        <div class="role-header">
+          <span class="role-emoji">💻</span>
+          <span class="role-name">Developer</span>
+        </div>
+        <div class="role-desc">Platform-specific secure coding patterns for Kotlin, Java, and Swift. Anti-patterns and best practices.</div>
+        <div class="role-triggers">
+          <span class="role-trigger">secure coding</span>
+          <span class="role-trigger">code review</span>
+        </div>
+      </div>
+
+      <div class="role-card">
+        <div class="role-header">
+          <span class="role-emoji">🏗️</span>
+          <span class="role-name">Architect</span>
+        </div>
+        <div class="role-desc">STRIDE threat models, architecture reviews, requirements matrices, and security architecture decision records.</div>
+        <div class="role-triggers">
+          <span class="role-trigger">threat model</span>
+          <span class="role-trigger">architecture</span>
+        </div>
+      </div>
+
+      <div class="role-card">
+        <div class="role-header">
+          <span class="role-emoji">📊</span>
+          <span class="role-name">Reporter</span>
+        </div>
+        <div class="role-desc">5 report formats including executive summaries, technical assessments, and compliance reports.</div>
+        <div class="role-triggers">
+          <span class="role-trigger">report</span>
+          <span class="role-trigger">executive summary</span>
+        </div>
+      </div>
+
+      <div class="role-card">
+        <div class="role-header">
+          <span class="role-emoji">🧬</span>
+          <span class="role-name">Weakness Analyzer</span>
+        </div>
+        <div class="role-desc">Look up any MASWE ID for details, CWE mappings, detection strategies, and remediation guidance.</div>
+        <div class="role-triggers">
+          <span class="role-trigger">MASWE-ID</span>
+          <span class="role-trigger">weakness</span>
+        </div>
+      </div>
+
+      <div class="role-card">
+        <div class="role-header">
+          <span class="role-emoji">🔄</span>
+          <span class="role-name">Updater</span>
+        </div>
+        <div class="role-desc">Self-sync with OWASP GitHub repos. Delta reports, cascading updates, automatic reference regeneration.</div>
+        <div class="role-triggers">
+          <span class="role-trigger">update skill</span>
+          <span class="role-trigger">check updates</span>
+        </div>
+      </div>
+
+      <div class="role-card">
+        <div class="role-header">
+          <span class="role-emoji">🤖</span>
+          <span class="role-name">Agent Output</span>
+        </div>
+        <div class="role-desc">Machine-readable YAML/JSON for AI pipelines. 5 schemas, 10 downstream triggers, 3 output modes.</div>
+        <div class="role-triggers">
+          <span class="role-trigger">YAML</span>
+          <span class="role-trigger">JSON</span>
+          <span class="role-trigger">pipeline</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ COVERAGE ═══ -->
+<section id="coverage">
+  <div class="container">
+    <div class="section-label">Full Coverage</div>
+    <h2 class="section-title">MASVS v2.1 – All 8 Categories.</h2>
+    <p class="section-subtitle">Every control, every category, every platform. Plus regulatory mappings to GDPR, PCI DSS, BSI, and ISO 27001.</p>
+
+    <div class="coverage-table-wrap">
+      <table class="coverage-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Controls</th>
+            <th>Focus</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="cat-name">MASVS-STORAGE</td><td><span class="controls-count">2</span></td><td>Secure data storage (data at rest)</td></tr>
+          <tr><td class="cat-name">MASVS-CRYPTO</td><td><span class="controls-count">2</span></td><td>Cryptographic operations & key management</td></tr>
+          <tr><td class="cat-name">MASVS-AUTH</td><td><span class="controls-count">3</span></td><td>Authentication & authorization</td></tr>
+          <tr><td class="cat-name">MASVS-NETWORK</td><td><span class="controls-count">2</span></td><td>Network communication (data in transit)</td></tr>
+          <tr><td class="cat-name">MASVS-PLATFORM</td><td><span class="controls-count">3</span></td><td>Platform interaction & IPC</td></tr>
+          <tr><td class="cat-name">MASVS-CODE</td><td><span class="controls-count">4</span></td><td>Code quality & secure build practices</td></tr>
+          <tr><td class="cat-name">MASVS-RESILIENCE</td><td><span class="controls-count">4</span></td><td>Reverse engineering & tampering</td></tr>
+          <tr><td class="cat-name">MASVS-PRIVACY</td><td><span class="controls-count">4</span></td><td>Privacy & data protection</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ AGENT PIPELINE ═══ -->
+<section id="pipeline">
+  <div class="container">
+    <div class="section-label">Agent-Ready</div>
+    <h2 class="section-title">Built for AI Pipelines.</h2>
+    <p class="section-subtitle">Machine-readable output schemas for downstream agents. Every output ends with an agent_summary block for orchestration.</p>
+
+    <div class="pipeline-grid">
+      <div class="pipeline-card">
+        <div class="pipeline-schema">finding</div>
+        <h4>Findings</h4>
+        <p>Structured findings with evidence, severity, and remediation for ticket agents and CI/CD gates.</p>
+      </div>
+      <div class="pipeline-card">
+        <div class="pipeline-schema">compliance</div>
+        <h4>Compliance Matrix</h4>
+        <p>MASVS matrix with pass/fail verdicts for GRC systems and compliance agents.</p>
+      </div>
+      <div class="pipeline-card">
+        <div class="pipeline-schema">threat_model</div>
+        <h4>Threat Model</h4>
+        <p>STRIDE analysis with risk ratings for architecture and risk management agents.</p>
+      </div>
+      <div class="pipeline-card">
+        <div class="pipeline-schema">weakness</div>
+        <h4>Weakness Lookup</h4>
+        <p>MASWE entries with detection and fix guidance for vulnerability management.</p>
+      </div>
+      <div class="pipeline-card">
+        <div class="pipeline-schema">secure_coding</div>
+        <h4>Secure Coding</h4>
+        <p>Platform code patterns for code generation agents and PR review bots.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ INSTALL ═══ -->
+<section id="install">
+  <div class="container">
+    <div class="section-label">Get Started</div>
+    <h2 class="section-title">Install in 30 seconds.</h2>
+    <p class="section-subtitle">Build a .skill file or install manually – then drag into any Claude chat.</p>
+
+    <div class="install-options">
+      <div class="install-card">
+        <h3>Option A: .skill File</h3>
+        <div class="install-desc">Build a ZIP archive and drag it into Claude.</div>
+        <div class="code-block">
+<span class="comment"># Clone & build</span>
+<span class="cmd">git clone</span> <span class="str">https://github.com/GodModeAI2025/owasp-mas-ai-skill.git</span>
+<span class="cmd">cd</span> owasp-mas-ai-skill/skill
+<span class="cmd">zip</span> -r ../owasp-mas.skill .
+
+<span class="comment"># → Drag owasp-mas.skill into Claude chat</span>
+        </div>
+      </div>
+      <div class="install-card">
+        <h3>Option B: Manual Copy</h3>
+        <div class="install-desc">Copy the skill directory directly to your skills path.</div>
+        <div class="code-block">
+<span class="comment"># Copy to skills directory</span>
+<span class="cmd">cp</span> -r skill/ /path/to/skills/user/owasp-mas/
+
+<span class="comment"># That's it. The skill auto-activates</span>
+<span class="comment"># when you mention mobile security topics.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<section class="cta-section">
+  <div class="container">
+    <div class="author-info">
+      Created by <strong>Mark Zimmermann</strong> · <a href="https://www.linkedin.com/in/markzimmermann/" target="_blank">LinkedIn</a> · <a href="https://thinkdifferenthinkai.com" target="_blank">Podcast</a>
+    </div>
+    <h2 class="cta-title">Ready to secure<br>mobile apps with AI?</h2>
+    <p class="cta-desc">Open source, CC BY-SA 4.0 licensed. Issues, PRs, and contributions are welcome.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+      <a href="https://github.com/GodModeAI2025/owasp-mas-ai-skill" target="_blank" class="btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        Star on GitHub
+      </a>
+      <a href="https://github.com/GodModeAI2025/owasp-mas-ai-skill/issues" target="_blank" class="btn-secondary">
+        Contribute →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="container">
+    <div class="footer-left">
+      <span>CC BY-SA 4.0</span>
+      <a href="https://mas.owasp.org" target="_blank">OWASP MAS</a>
+      <a href="https://github.com/GodModeAI2025/owasp-mas-ai-skill" target="_blank">GitHub</a>
+    </div>
+    <div class="footer-right">
+      Derived from OWASP MASVS · MASWE · MASTG
+    </div>
+  </div>
+</footer>
+
+<script>
+// Intersection Observer for scroll animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.animationPlayState = 'running';
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.animate-in').forEach(el => {
+  el.style.animationPlayState = 'paused';
+  observer.observe(el);
+});
+
+// Smooth nav bg on scroll
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('nav');
+  if (window.scrollY > 50) {
+    nav.style.borderBottomColor = 'rgba(0,229,255,0.08)';
+  } else {
+    nav.style.borderBottomColor = 'transparent';
+  }
+});
+</script>
+</body>
+</html>
