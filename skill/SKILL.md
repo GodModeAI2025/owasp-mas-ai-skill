@@ -33,14 +33,14 @@ Bestimme anhand der Anfrage die passende Rolle und lies die zugehörige Referenz
 ### Audit-Workflow
 
 **Phase 1 – Scope:**
-Kläre: App-Typ (Native/Hybrid/Cross-Platform), Testprofil (L1/L2/R), Plattform (Android/iOS/beide), sensible Daten, regulatorischer Kontext (DSGVO/PCI DSS/KRITIS), Testart (Whitebox/Greybox/Blackbox).
+Kläre: App-Typ (Native/Hybrid/Cross-Platform), Testprofil (MAS-L1 oder MAS-L2, optional +R und +P, Auswahl siehe `references/mastg-testing.md`), Plattform (Android/iOS/beide), sensible Daten, regulatorischer Kontext (DSGVO/PCI DSS/KRITIS), Testart (Whitebox/Greybox/Blackbox).
 
 **Phase 2 – Checkliste:**
 Generiere MASVS-Checkliste mit allen 24 Kontrollen aus `references/masvs-controls.md`:
 
 ```
 MASVS Audit-Checkliste – [App] – [Datum]
-Profil: [L1/L2/R] | Plattform: [Android/iOS]
+Profil: [MAS-L1/MAS-L2][+R][+P] | Plattform: [Android/iOS]
 
 Kategorie  | Kontrolle   | Status | Finding | Schweregrad | Kommentar
 -----------|-------------|--------|---------|-------------|----------
@@ -49,6 +49,8 @@ STORAGE    | STORAGE-1   | ☐      |         |             |
 ```
 
 Status: ✅ Pass | ❌ Fail | ⚠️ Partial | ⏭️ N/A | ☐ Nicht getestet
+
+Eine Kontrolle, die nicht geprüft werden konnte (Tool-Fehler, fehlender Gerätezugriff, fehlende Unterlagen), bleibt ☐ und wird nie als ✅ geführt. Schweigen darf nie wie ein Pass aussehen.
 
 **Phase 3 – Testdurchführung:**
 Für jede Kontrolle aus `references/mastg-testing.md`: konkrete Testschritte, Tools, Pass/Fail-Kriterien.
@@ -338,7 +340,7 @@ agent_summary:
     version: "[version]"
     platform: "[ios|android]"
   assessment:
-    profile: "[L1|L2|R]"
+    profile: "[MAS-L1|MAS-L2][+R][+P]"
     verdict: "[pass|conditional_pass|fail]"
   metrics:
     findings_total: N
@@ -386,7 +388,7 @@ Vor jeder Antwort prüfen:
 3. Plattform-Unterschiede (Android vs. iOS) korrekt
 4. Empfehlungen sind umsetzbar (keine generischen Ratschläge)
 5. Code-Beispiele syntaktisch korrekt und plattform-passend
-6. Testprofil (L1/L2/R) korrekt angewendet
+6. Testprofil (MAS-L1/MAS-L2, ggf. +R/+P) korrekt angewendet; nicht geprüfte Kontrollen als „Nicht getestet“ ausgewiesen, nie als Pass
 7. Bei Berichten: Disclaimer und Vertraulichkeitsstufe enthalten
 8. Bei Updates: Delta-Report vor Rebuild zeigen, Validierung nach Rebuild bestanden
 9. Bei Agent-Output: Schema-Version gesetzt, agent_summary vollständig, keine Klartext-Secrets, downstream_triggers vorhanden

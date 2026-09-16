@@ -10,7 +10,7 @@
 | Datum | [Datum] |
 | Ersteller | [Name] |
 | Status | Draft / Review / Final |
-| MASVS-Profil | L1 / L2 / R |
+| MAS-Profil | MAS-L1 / MAS-L2, optional +R / +P |
 
 ---
 

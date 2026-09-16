@@ -206,9 +206,17 @@ web_fetch: https://mas.owasp.org/MASTG/tools/
 web_fetch: https://mas.owasp.org/MASTG/best-practices/
 ```
 
+**MAS Testing Profiles:** Seit September 2026 nicht mehr Teil des MASTG, sondern eigener Bereich der MAS-Website (Repo `OWASP/mas-website`, Ordner `docs/Profiles`). Prüfe auf neue oder umbenannte Profile, etwa das in MASWE-Metadaten angekündigte MAS-EUDIW:
+
+```
+web_fetch: https://mas.owasp.org/Profiles/
+web_fetch: https://github.com/OWASP/mas-website/tree/main/docs/Profiles
+```
+
 ### Rebuild: references/mastg-testing.md
 
 Betroffene Sektionen aktualisieren:
+- Testing-Profile: Profiltabelle (Ziel, Angreifermodell) und Kombinationen mit mas.owasp.org/Profiles abgleichen
 - Tool-Tabelle: Neue Tools ergänzen, veraltete markieren
 - Test-Case-Mapping: Neue MASVS→Test-Zuordnungen
 - Techniken: Neue Techniken ergänzen
