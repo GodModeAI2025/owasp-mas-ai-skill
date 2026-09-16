@@ -25,7 +25,7 @@ Für: C-Level, Management, Entscheidungsträger. Maximal 3 Seiten.
 | App | [Name] v[Version] (Build [N]) |
 | Plattform | [iOS/Android/Beide] |
 | Zeitraum | [Datum von–bis] |
-| Profil | MAS-[L1/L2/R] |
+| Profil | MAS-[L1/L2][+R][+P] |
 | Gesamtbewertung | 🔴/🟡/🟢 [ROT/GELB/GRÜN] |
 
 [2–3 Sätze Gesamteinschätzung]
@@ -61,7 +61,7 @@ Für: Security-Team, Entwickler, Architekten. Vollständig.
 | Bundle-ID / Package | [ID] |
 | Version | [Version] (Build [N]) |
 | Plattform | [iOS/Android] |
-| Testprofil | MAS-[L1/L2/R] |
+| Testprofil | MAS-[L1/L2][+R][+P] |
 | Testart | [Whitebox/Greybox/Blackbox] |
 | Prüfzeitraum | [Datum] |
 | Vertraulichkeit | VERTRAULICH |
@@ -120,7 +120,7 @@ Für: Compliance-Abteilung, externe Auditoren, Regulatoren.
 ## [App-Name] v[Version]
 
 ## 1. Compliance-Statement
-Geprüfter Standard: OWASP MASVS v2.1, Profil MAS-[L1/L2/R]
+Geprüfter Standard: OWASP MASVS v2.1, Profil MAS-[L1/L2][+R][+P]
 Erfüllungsgrad: [X]% ([Y] von [Z] Kontrollen bestanden)
 
 ## 2. Kontroll-Matrix
@@ -163,7 +163,7 @@ Für: Projektmanagement, Security-Team.
 | STORAGE | [X]% | 🟡 |
 
 ## 2. Soll-Zustand
-Ziel-Profil: MAS-[L1/L2/R]
+Ziel-Profil: MAS-[L1/L2][+R][+P]
 Ziel-Erfüllung: 100% aller Pflicht-Kontrollen
 
 ## 3. Gap-Tabelle

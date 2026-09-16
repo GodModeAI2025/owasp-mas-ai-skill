@@ -144,7 +144,7 @@ schema_version: "1.0"
 compliance:
   standard: "OWASP-MASVS"
   version: "2.1"
-  profile: "MAS-L2"
+  profile: "MAS-L2"        # MAS-L1 | MAS-L2, optional +R / +P, z. B. "MAS-L2+P+R"
   app_id: "com.enbw.ih.eap.dev"
   date: "2026-03-07"
   
@@ -154,13 +154,15 @@ compliance:
     fail: 6
     partial: 8
     not_applicable: 3
-    compliance_rate: 0.29    # pass / (total - n/a)
+    not_tested: 0
+    compliance_rate: 0.29    # pass / (total - n/a); not_tested zählt NICHT als pass
     verdict: "non_compliant"  # compliant | partially_compliant | non_compliant
+                              # compliant nur, wenn fail, partial und not_tested alle 0 sind
   
   controls:
     - id: "MASVS-STORAGE-1"
       category: "STORAGE"
-      status: "fail"           # pass | fail | partial | not_applicable
+      status: "fail"           # pass | fail | partial | not_applicable | not_tested
       findings: ["F-07"]
       comment: "NSFileProtectionNone referenziert"
       
@@ -386,6 +388,7 @@ agent_summary:
     controls_pass: 7
     controls_fail: 6
     controls_partial: 8
+    controls_not_tested: 0
     compliance_rate: 0.29
     
   # Blockierte Kontrollen (für CI/CD-Gates)

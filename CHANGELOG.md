@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased]
+
+### Geändert
+- **MAS Testing Profiles:** Die Level-Schreibweise `L1/L2/R` ist durch die Profile MAS-L1, MAS-L2, MAS-R und MAS-P ersetzt (SKILL.md, mastg-testing.md, report-templates.md, threat-model-template.md, agent-output.md). Neu in `mastg-testing.md`: MAS-P, Angreifermodell je Profil, typische Kombinationen (z. B. MAS-L2+P+R) und der Hinweis, das Profil aus dem Threat Model abzuleiten.
+- **Nicht getestete Kontrollen:** Das Compliance-Schema kennt den Status `not_tested` und den Zähler `not_tested`, `agent_summary.metrics` den Zähler `controls_not_tested`. `compliant` ist nur zulässig, wenn keine Kontrolle `fail`, `partial` oder `not_tested` ist. Die Auditor-Checkliste stellt klar, dass nicht Geprüftes nie als Pass erscheint.
+- **Updater:** Profile werden aus `mas.owasp.org/Profiles` (Repo `OWASP/mas-website`) synchronisiert, nachdem OWASP sie im September 2026 aus dem MASTG ausgelagert hat.
+
 ## [1.1.0] – 2026-03-07
 
 ### Hinzugefügt
