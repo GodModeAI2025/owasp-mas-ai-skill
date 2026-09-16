@@ -27,11 +27,11 @@ MASVS v2 kennt keine Verifikationsstufen mehr. Die früheren Level L1/L2/R leben
 | Profil | Ziel | Angreifermodell |
 |---|---|---|
 | **MAS-L1** | Essential Security – Basis für alle Apps | Andere Apps auf dem Gerät sind Angreifer |
-| **MAS-L2** | Advanced Security – Apps mit sensiblen Daten oder Funktionen (Banking, Health) | Dem Betriebssystem ist nicht zu trauen, physischer Gerätezugriff möglich |
-| **MAS-R** | Resilient Security – Schutz von Geschäftslogik und geistigem Eigentum | Der Gerätenutzer selbst ist Angreifer (Reverse Engineer, Cheater) |
-| **MAS-P** | Baseline Privacy – seit MASVS v2.1 | Kein Angreifermodell; Schutz personenbezogener Daten und transparente Datenverarbeitung |
+| **MAS-L2** | Advanced Security – erweitert MAS-L1 für hoch sensible Daten und sensible Funktionen (Banking, Health) | Dem Betriebssystem ist nicht zu trauen (Root/Jailbreak), Dritte mit oder ohne physischen Gerätezugriff |
+| **MAS-R** | Resilient Security – Schutz von Geschäftslogik und geistigem Eigentum gegen Reverse Engineering und Tampering | Der Gerätenutzer selbst ist Angreifer (Reverse Engineer, Cheater) |
+| **MAS-P** | Baseline Privacy – für alle Apps mit nutzerbezogenen sensiblen Daten (Kategorie MASVS-PRIVACY seit MASVS v2.1) | Kein Angreifermodell; Schutz personenbezogener Daten und verantwortungsvolle Datenverarbeitung |
 
-**Kombinieren statt wählen:** L1 und L2 sind die Sicherheitsbasis (eins von beiden), R und P kommen bei Bedarf dazu. Typische Kombinationen:
+**Kombinieren statt wählen:** MAS-L1 oder MAS-L2 bildet die Sicherheitsbasis (L2 erweitert L1). MAS-R ergänzt diese Basis und wird nie allein verwendet, MAS-P kommt bei personenbezogenen Daten dazu. Typische Kombinationen:
 
 | Kombination | Wann |
 |---|---|
@@ -40,7 +40,7 @@ MASVS v2 kennt keine Verifikationsstufen mehr. Die früheren Level L1/L2/R leben
 | MAS-L2+P | Mittel/hoch sensible Daten oder sensible Funktionen |
 | MAS-L2+P+R | Zusätzlich Business-Assets, die gegen Manipulation geschützt werden müssen |
 
-Die Standardprofile sind ein Ausgangspunkt. Ziel ist nicht, jede Prüfung eines Profils zu erfüllen: Das Profil wird aus dem Threat Model abgeleitet (`references/threat-model-template.md`) und darf pro Kategorie abweichen, etwa L2 für Storage und L1 für Network, wenn hoch sensible Daten das Gerät nie verlassen. Abweichungen im Bericht begründen.
+Die Standardprofile sind ein Ausgangspunkt für Teams ohne eigenes Threat Model; das höchste Schutzniveau bietet ein eigenes, aus dem Threat Model abgeleitetes Profil. Ziel ist nicht, jede Prüfung eines Profils zu erfüllen: Das Profil wird aus dem Threat Model abgeleitet (`references/threat-model-template.md`) und darf pro Kategorie abweichen, etwa L2 für Storage und L1 für Network, wenn hoch sensible Daten das Gerät nie verlassen. Abweichungen im Bericht begründen.
 
 ---
 
