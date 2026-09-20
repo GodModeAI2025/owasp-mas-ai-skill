@@ -8,8 +8,8 @@
 - **Updater:** Profile werden aus `mas.owasp.org/Profiles` (Repo `OWASP/mas-website`) synchronisiert, nachdem OWASP sie im September 2026 aus dem MASTG ausgelagert hat. Zusätzlich geprüft werden Spezialprofile und die Profilzuordnung der Tests.
 
 ### Hinzugefügt
-- **Spezialprofil MAS-EUDIW:** `mastg-testing.md` beschreibt das im September 2026 veröffentlichte Profil für Wallet Instances der EU Digital Identity Wallet (Assets WIA und PID, Mapping auf das Risikoregister nach (EU) 2024/2981, Angreifer mit hohem Angriffspotenzial). SKILL.md, `agent-output.md`, `report-templates.md` und `threat-model-template.md` lassen es als Profilwert zu.
-- **Profilzuordnung der Tests:** MASTG-Tests erben ihre Profile von der zugehörigen MASWE und deklarieren sie nicht mehr selbst (`mastg-testing.md`, `updater-sync.md`).
+- **Spezialprofil MAS-EUDIW:** `mastg-testing.md` beschreibt das im September 2026 veröffentlichte Profil für Wallet Instances der EU Digital Identity Wallet (Assets WIA und PID, Mapping auf das Risikoregister nach (EU) 2024/2981, Widerstand gegen Angreifer mit hohem Angriffspotenzial nach (EU) 2015/1502). SKILL.md, `agent-output.md`, `report-templates.md` und `threat-model-template.md` lassen es als Profilwert zu.
+- **Profilzuordnung der Tests:** Die aktuellen MASTG-Tests erben ihre Profile von der zugehörigen MASWE und deklarieren sie nicht mehr selbst; nur die als `deprecated` markierten V1-Tests tragen das alte `profiles`-Feld noch (`mastg-testing.md`, `updater-sync.md`).
 
 ## [1.1.0] – 2026-03-07
 
