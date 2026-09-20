@@ -42,6 +42,16 @@ MASVS v2 kennt keine Verifikationsstufen mehr. Die früheren Level L1/L2/R leben
 
 Die Standardprofile sind ein Ausgangspunkt für Teams ohne eigenes Threat Model; das höchste Schutzniveau bietet ein eigenes, aus dem Threat Model abgeleitetes Profil. Ziel ist nicht, jede Prüfung eines Profils zu erfüllen: Das Profil wird aus dem Threat Model abgeleitet (`references/threat-model-template.md`) und darf pro Kategorie abweichen, etwa L2 für Storage und L1 für Network, wenn hoch sensible Daten das Gerät nie verlassen. Abweichungen im Bericht begründen.
 
+**Spezialprofile:** Neben den vier Standardprofilen führt OWASP seit September 2026 Profile für einen bestimmten App-Typ oder regulatorischen Kontext.
+
+| Profil | Für wen | Besonderheit |
+|---|---|---|
+| **MAS-EUDIW** | Wallet Instances der EU Digital Identity Wallet, dazu andere High-Assurance-Apps, die den Anforderungskatalog ganz oder in Teilen anwenden | Übersetzt die regulatorischen Anforderungen an die EUDI Wallet in testbare MAS-Anforderungen. Deckt die Assets eines digitalen Identitätssystems ab, insbesondere Wallet Instance Attestation (WIA) und Person Identification Data (PID). Die Anforderungen sind auf das Risikoregister für europäische Wallets (Durchführungsverordnung (EU) 2024/2981) und auf MASWE gemappt und zielen auf Angreifer mit hohem Angriffspotenzial (Level of Assurance „High“). |
+
+MAS-EUDIW ist kein fünftes Standardprofil und tritt nicht an die Stelle von MAS-L1/L2: Es greift den Großteil der Kontrollen aller vier Standardprofile auf und ergänzt sie. Wer es anwendet, ordnet die eigenen Assets (z. B. Nutzungsprotokolle, PIN-Salt, WIA, kritische private Schlüssel) selbst den Anforderungen zu und setzt die Konfigurationswerte (z. B. zugelassene kryptografische Verfahren, Mindest-OS-Version) nach eigener Risikoeinschätzung. Quelle und aktuelle Dokumente: [mas.owasp.org/Profiles/MAS-EUDIW](https://mas.owasp.org/Profiles/MAS-EUDIW/).
+
+**Wo die Profilzuordnung steht:** Seit September 2026 tragen die MASWE-Einträge die Profile; MASTG-Tests deklarieren keine Profile mehr, sondern erben sie von der MASWE, die sie abdecken. Welche Tests ein Profil verlangt, wird deshalb über die Weakness bestimmt und nicht über die Test-Metadaten.
+
 ---
 
 ## Android Testing
