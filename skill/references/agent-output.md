@@ -62,7 +62,7 @@ finding:
   evidence:
     type: "static_analysis"      # static_analysis | dynamic_analysis | config_review
     file: "Info.plist"
-    key: "CSB_OCP_APIM_SUBSCRIPTION_KEY"
+    key_name: "CSB_OCP_APIM_SUBSCRIPTION_KEY"   # Nur der Schlüsselname, nie der Schlüssel selbst
     value_hash: "sha256:a1b2c3d4..."  # Nie den Klarwert, immer Hash
     location: "app_bundle/Info.plist"
     snippet: "CSB_OCP_APIM_SUBSCRIPTION_KEY = [REDACTED]"
@@ -114,7 +114,7 @@ findings:
     title: "API Subscription Key hardcoded in Info.plist"
     evidence:
       file: "Info.plist"
-      key: "CSB_OCP_APIM_SUBSCRIPTION_KEY"
+      key_name: "CSB_OCP_APIM_SUBSCRIPTION_KEY"
     remediation:
       action: "move_to_runtime_config"
       priority: "immediate"
@@ -155,7 +155,7 @@ compliance:
     partial: 8
     not_applicable: 3
     not_tested: 0
-    compliance_rate: 0.29    # pass / (total - n/a); not_tested zählt NICHT als pass
+    compliance_rate: 0.33    # pass / (total - n/a) = 7 / (24 - 3); not_tested zählt NICHT als pass
     verdict: "non_compliant"  # compliant | partially_compliant | non_compliant
                               # compliant nur, wenn fail, partial und not_tested alle 0 sind
   
@@ -389,7 +389,7 @@ agent_summary:
     controls_fail: 6
     controls_partial: 8
     controls_not_tested: 0
-    compliance_rate: 0.29
+    compliance_rate: 0.33          # pass / (total - n/a) = 7 / (24 - 3)
     
   # Blockierte Kontrollen (für CI/CD-Gates)
   blocked_controls:
@@ -454,21 +454,21 @@ Wenn der Benutzer "für Mensch und Agent" anfordert, wird die Ausgabe in zwei Bl
 1. **Menschenlesbare Antwort** – Prosa, Tabellen, Empfehlungen (wie bei den anderen Rollen)
 2. **Agent-Artefakt** – YAML-Code-Block mit dem vollständigen maschinenlesbaren Output
 
-```markdown
+````markdown
 [Menschenlesbare Analyse...]
 
 ## Agent-Artefakt
 
-\```yaml
+```yaml
 schema_version: "1.0"
 assessment:
   app_id: "..."
 findings:
   - id: "F-01"
-    ...
+    # ... übrige Felder nach Finding-Schema
 agent_summary:
-  ...
-\```
+  # ... Felder nach Agent Summary Block
 ```
+````
 
 Der Agent-Artefakt-Block ist immer vollständig und selbstbeschreibend. Ein nachgelagerter Agent braucht keinen Kontext aus der menschenlesbaren Antwort.

@@ -375,6 +375,7 @@ Findings enthalten `downstream_triggers` für Agent-Orchestrierung:
 
 - Nie Klartext-Secrets im Output (immer `value_hash` statt `value`)
 - Nie Credentials in `evidence.snippet` (immer `[REDACTED]`)
+- Bezeichner von Secrets gehören in Namensfelder (`evidence.key_name`, `key_id`), nie in ein Feld `key`, `secret` oder `password` – dort steht sonst per Konvention der Klartextwert
 - `agent_summary.pipeline.release_blocked` ist `true` wenn mindestens 1 Critical Finding offen
 
 ---
