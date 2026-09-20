@@ -144,7 +144,7 @@ schema_version: "1.0"
 compliance:
   standard: "OWASP-MASVS"
   version: "2.1"
-  profile: "MAS-L2"        # MAS-L1 | MAS-L2, optional +R / +P, z. B. "MAS-L2+P+R"
+  profile: "MAS-L2"        # MAS-L1 | MAS-L2, optional +R / +P, z. B. "MAS-L2+P+R"; Spezialprofil: "MAS-EUDIW"
   app_id: "com.enbw.ih.eap.dev"
   date: "2026-03-07"
   

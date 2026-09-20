@@ -206,17 +206,19 @@ web_fetch: https://mas.owasp.org/MASTG/tools/
 web_fetch: https://mas.owasp.org/MASTG/best-practices/
 ```
 
-**MAS Testing Profiles:** Seit September 2026 nicht mehr Teil des MASTG, sondern eigener Bereich der MAS-Website (Repo `OWASP/mas-website`, Ordner `docs/Profiles`). Prüfe auf neue oder umbenannte Profile, etwa das in MASWE-Metadaten angekündigte MAS-EUDIW:
+**MAS Testing Profiles:** Seit September 2026 nicht mehr Teil des MASTG, sondern eigener Bereich der MAS-Website (Repo `OWASP/mas-website`, Ordner `docs/Profiles`). Prüfe auf neue oder umbenannte Profile und darauf, ob ein Profil als Standard- oder als Spezialprofil geführt wird (Spezialprofile stehen dort unter „Specialized Profiles“; derzeit einziges Spezialprofil ist MAS-EUDIW, veröffentlicht im September 2026):
 
 ```
 web_fetch: https://mas.owasp.org/Profiles/
 web_fetch: https://github.com/OWASP/mas-website/tree/main/docs/Profiles
 ```
 
+**Profilzuordnung der Tests:** Die aktuellen MASTG-Tests tragen seit September 2026 keine `profiles`-Metadaten mehr, sie erben sie von der zugehörigen MASWE (deren Frontmatter das Feld `profiles` führt). Wer prüfen will, welche Tests ein Profil verlangt, liest die Profile an der Weakness. Ein `profiles`-Feld in einem Test ist ein Rest der als `deprecated` markierten MASTG-V1-Generation und keine Gegenanzeige. Prüfe bei jedem Sync, ob diese Regel noch gilt, bevor Test-Mappings aktualisiert werden.
+
 ### Rebuild: references/mastg-testing.md
 
 Betroffene Sektionen aktualisieren:
-- Testing-Profile: Profiltabelle (Ziel, Angreifermodell) und Kombinationen mit mas.owasp.org/Profiles abgleichen
+- Testing-Profile: Profiltabelle (Ziel, Angreifermodell), Kombinationen und die Tabelle der Spezialprofile mit mas.owasp.org/Profiles abgleichen
 - Tool-Tabelle: Neue Tools ergänzen, veraltete markieren
 - Test-Case-Mapping: Neue MASVS→Test-Zuordnungen
 - Techniken: Neue Techniken ergänzen

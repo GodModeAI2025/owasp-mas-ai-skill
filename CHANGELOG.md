@@ -5,7 +5,11 @@
 ### Geändert
 - **MAS Testing Profiles:** Die Level-Schreibweise `L1/L2/R` ist durch die Profile MAS-L1, MAS-L2, MAS-R und MAS-P ersetzt (SKILL.md, mastg-testing.md, report-templates.md, threat-model-template.md, agent-output.md). Neu in `mastg-testing.md`: MAS-P, Angreifermodell je Profil, typische Kombinationen (z. B. MAS-L2+P+R) und der Hinweis, das Profil aus dem Threat Model abzuleiten.
 - **Nicht getestete Kontrollen:** Das Compliance-Schema kennt den Status `not_tested` und den Zähler `not_tested`, `agent_summary.metrics` den Zähler `controls_not_tested`. `compliant` ist nur zulässig, wenn keine Kontrolle `fail`, `partial` oder `not_tested` ist. Die Auditor-Checkliste stellt klar, dass nicht Geprüftes nie als Pass erscheint.
-- **Updater:** Profile werden aus `mas.owasp.org/Profiles` (Repo `OWASP/mas-website`) synchronisiert, nachdem OWASP sie im September 2026 aus dem MASTG ausgelagert hat.
+- **Updater:** Profile werden aus `mas.owasp.org/Profiles` (Repo `OWASP/mas-website`) synchronisiert, nachdem OWASP sie im September 2026 aus dem MASTG ausgelagert hat. Zusätzlich geprüft werden Spezialprofile und die Profilzuordnung der Tests.
+
+### Hinzugefügt
+- **Spezialprofil MAS-EUDIW:** `mastg-testing.md` beschreibt das im September 2026 veröffentlichte Profil für Wallet Instances der EU Digital Identity Wallet (Assets WIA und PID, Mapping auf das Risikoregister nach (EU) 2024/2981, Widerstand gegen Angreifer mit hohem Angriffspotenzial nach (EU) 2015/1502). SKILL.md, `agent-output.md`, `report-templates.md` und `threat-model-template.md` lassen es als Profilwert zu.
+- **Profilzuordnung der Tests:** Die aktuellen MASTG-Tests erben ihre Profile von der zugehörigen MASWE und deklarieren sie nicht mehr selbst; nur die als `deprecated` markierten V1-Tests tragen das alte `profiles`-Feld noch (`mastg-testing.md`, `updater-sync.md`).
 
 ## [1.1.0] – 2026-03-07
 

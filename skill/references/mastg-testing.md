@@ -42,6 +42,18 @@ MASVS v2 kennt keine Verifikationsstufen mehr. Die früheren Level L1/L2/R leben
 
 Die Standardprofile sind ein Ausgangspunkt für Teams ohne eigenes Threat Model; das höchste Schutzniveau bietet ein eigenes, aus dem Threat Model abgeleitetes Profil. Ziel ist nicht, jede Prüfung eines Profils zu erfüllen: Das Profil wird aus dem Threat Model abgeleitet (`references/threat-model-template.md`) und darf pro Kategorie abweichen, etwa L2 für Storage und L1 für Network, wenn hoch sensible Daten das Gerät nie verlassen. Abweichungen im Bericht begründen.
 
+**Spezialprofile:** Neben den vier Standardprofilen führt OWASP seit September 2026 Profile für einen bestimmten App-Typ oder regulatorischen Kontext.
+
+| Profil | Für wen | Besonderheit |
+|---|---|---|
+| **MAS-EUDIW** | Wallet Instances der EU Digital Identity Wallet, dazu andere High-Assurance-Apps, die den Anforderungskatalog ganz oder in Teilen anwenden oder erweitern | Übersetzt die regulatorischen Anforderungen an die EUDI Wallet in testbare MAS-Anforderungen. Deckt die Assets eines digitalen Identitätssystems ab, insbesondere Wallet Instance Attestation (WIA) und Person Identification Data (PID). Jede Anforderung ist auf das Risikoregister für europäische Wallets (Anhang I der Durchführungsverordnung (EU) 2024/2981) und auf die zugehörige MASWE gemappt. Empfohlen für Wallets, die Widerstand gegen Angreifer mit hohem Angriffspotenzial im Sinne der Durchführungsverordnung (EU) 2015/1502 nachweisen müssen (Sicherheitsniveau „hoch“). |
+
+MAS-EUDIW ist kein fünftes Standardprofil und tritt nicht an die Stelle von MAS-L1/L2: Es greift den Großteil der Kontrollen aller vier Standardprofile auf und ergänzt sie. Wer es anwendet, ordnet die eigenen Assets (z. B. Nutzungsprotokolle, PIN-Salt, WIA, kritische private Schlüssel) selbst den Anforderungen zu und setzt die Konfigurationswerte (z. B. zugelassene kryptografische Verfahren, Mindest-OS-Version) nach eigener Risikoeinschätzung.
+
+Die Profilseite [mas.owasp.org/Profiles/MAS-EUDIW](https://mas.owasp.org/Profiles/MAS-EUDIW/) enthält den Anforderungskatalog nicht selbst, sondern verlinkt ihn: die *OWASP MAS EUDI Wallet Profile Requirements Catalogue* (Tabelle mit den Anforderungen samt Mapping) und die *OWASP MAS EUDI Wallet Profile Practical Guidelines* (Begleitleitfaden). Für ein Audit nach MAS-EUDIW sind beide Dokumente von dort zu holen; dieser Skill hält keine Kopie vor.
+
+**Wo die Profilzuordnung steht:** Seit September 2026 tragen die MASWE-Einträge die Profile (Frontmatter-Feld `profiles`, z. B. `[L2, EUDIW]`); die aktuellen MASTG-Tests deklarieren keine Profile mehr, sondern erben sie von der MASWE, die sie abdecken. Welche Tests ein Profil verlangt, wird deshalb über die Weakness bestimmt und nicht über die Test-Metadaten. Nur die als `deprecated` markierten Tests der MASTG-V1-Generation tragen das alte `profiles`-Feld noch.
+
 ---
 
 ## Android Testing

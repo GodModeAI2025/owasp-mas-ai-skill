@@ -10,7 +10,7 @@
 | Datum | [Datum] |
 | Ersteller | [Name] |
 | Status | Draft / Review / Final |
-| MAS-Profil | MAS-L1 / MAS-L2, optional +R / +P |
+| MAS-Profil | MAS-L1 / MAS-L2, optional +R / +P; Spezialprofil MAS-EUDIW |
 
 ---
 
