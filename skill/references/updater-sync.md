@@ -311,7 +311,7 @@ done
 grep -c "^### MASVS-" references/masvs-controls.md
 
 # 3. MASWE-IDs zählen (mindestens 117)
-grep -oP "MASWE-\d+" references/maswe-catalog.md | sort -u | wc -l
+grep -oE "MASWE-[0-9]+" references/maswe-catalog.md | sort -u | wc -l
 
 # 4. Alle 9 Referenzdateien vorhanden und nicht-leer
 expected="agent-output mastg-testing masvs-controls maswe-catalog report-templates secure-coding-android secure-coding-ios threat-model-template updater-sync"
@@ -341,6 +341,10 @@ done
 grep -c "schema_version" references/agent-output.md
 
 # 8. Keine Klartext-Secrets in agent-output.md
+# Die Prüfung schlägt bei JEDEM Feld "password:", "secret:" oder "key:" mit Wert an.
+# Deshalb tragen Felder, die nur den Bezeichner eines Secrets enthalten, die Endung
+# _name oder _id (evidence.key_name, downstream_triggers[].key_id). Diese Regel beim
+# Rebuild der Schemata beibehalten, statt die Prüfung aufzuweichen.
 if grep -qiE "(password|secret|key):\s*\"[A-Za-z0-9]" references/agent-output.md; then
     echo "❌ Mögliche Klartext-Secrets in agent-output.md"
 else
@@ -354,6 +358,30 @@ for l in sys.stdin:
     if 'description:' in l:
         d = l.split('description:')[1].strip().strip('\"')
         print(f'Description: {len(d)} chars {\"✅\" if len(d) <= 1024 else \"❌\"}')"
+
+# 10. Alle YAML-Blöcke in agent-output.md sind gültiges YAML
+python3 - references/agent-output.md <<'PYEOF'
+import sys, yaml
+fence = chr(96) * 3          # Code-Fence, hier nicht literal notierbar
+lines = open(sys.argv[1], encoding="utf-8").read().split("\n")
+blocks, i = [], 0
+while i < len(lines):
+    if lines[i].strip() == fence + "yaml":
+        j = i + 1
+        while j < len(lines) and set(lines[j].strip()) != {chr(96)}:
+            j += 1
+        blocks.append((i + 2, "\n".join(lines[i + 1:j])))
+        i = j
+    i += 1
+bad = 0
+for lineno, block in blocks:
+    try:
+        yaml.safe_load(block)
+    except Exception as e:
+        bad += 1
+        print("❌ YAML-Block ab Zeile %d: %s" % (lineno, e))
+print("%s YAML-Blöcke: %d/%d gültig" % ("❌" if bad else "✅", len(blocks) - bad, len(blocks)))
+PYEOF
 ```
 
 ### Erwartete Mindestwerte
@@ -368,6 +396,7 @@ for l in sys.stdin:
 | SKILL.md Routing-Einträge | 8+ |
 | Description-Länge | ≤ 1024 Zeichen |
 | Agent-Output schema_version | ≥ 1 |
+| Gültige YAML-Blöcke in agent-output.md | alle (Platzhalter als `# ...`-Kommentar, nicht als `...`) |
 | Gesamtzeilen alle .md | 3000+ |
 
 ---
@@ -403,6 +432,7 @@ for l in sys.stdin:
 - Description: [X] chars ≤ 1024 ✅
 - Agent-Output schema_version: [X] ✅
 - Keine Klartext-Secrets: ✅
+- YAML-Blöcke in agent-output.md: [X/X] ✅
 
 ### Skill-Version
 [Alt] → [Neu]
